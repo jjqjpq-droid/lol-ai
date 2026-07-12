@@ -1,14 +1,21 @@
-import { encoding_for_model } from 'js-tiktoken'
+import { encodingForModel, getEncoding as getTiktokenEncoding } from 'js-tiktoken'
 
 const encodingMap: Record<string, any> = {}
 
 export function getEncoding(modelName: string) {
   if (!encodingMap[modelName]) {
     try {
-      encodingMap[modelName] = encoding_for_model(modelName as any)
+      encodingMap[modelName] = encodingForModel(modelName as any)
     } catch {
       // Fallback to cl100k_base encoding for unknown models
-      encodingMap[modelName] = encoding_for_model('gpt-3.5-turbo')
+      try {
+        encodingMap[modelName] = getTiktokenEncoding('cl100k_base')
+      } catch {
+        // If all else fails, return a mock encoding
+        encodingMap[modelName] = {
+          encode: (text: string) => Array.from(text).slice(0, Math.ceil(text.length / 4)),
+        }
+      }
     }
   }
   return encodingMap[modelName]

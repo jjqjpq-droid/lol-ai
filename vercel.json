@@ -1,6 +1,6 @@
 {
-  "name": "lol-ai",
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "nodeVersion": "24.x"
 }
